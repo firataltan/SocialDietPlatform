@@ -1,0 +1,87 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CBD84C3D-A534-4548-8B3D-E8503C1F6289}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{18982C65-6C97-4AB5-AA42-F2C7C8F812C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.Domain", "src\Core\SocialDietPlatform.Domain\SocialDietPlatform.Domain.csproj", "{E68D1391-8E0F-48C1-A5B4-632A3F8FAA33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.Application", "src\Core\SocialDietPlatform.Application\SocialDietPlatform.Application.csproj", "{A012DB74-0A4D-4297-A177-C667937F3267}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{62063CD3-D423-41A5-BF26-3A89D41A2B6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.Infrastructure", "src\Infrastructure\SocialDietPlatform.Infrastructure\SocialDietPlatform.Infrastructure.csproj", "{B8A42D58-B072-4059-8388-FCE4833DE21D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.Persistence", "src\Infrastructure\SocialDietPlatform.Persistence\SocialDietPlatform.Persistence.csproj", "{7E2E4E66-F2A8-47CC-9ED0-673F88B58394}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{55EBE15D-F8A0-4709-BA8E-49B551322F11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.API", "src\Presentation\SocialDietPlatform.API\SocialDietPlatform.API.csproj", "{BF1D914C-BD59-4862-84BB-AFF0913A3E3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{994F763D-329E-4AB3-B9B6-8CD56BDA32DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.Application.Tests", "tests\SocialDietPlatform.Application.Tests\SocialDietPlatform.Application.Tests.csproj", "{AA6E8370-1116-4FAC-9F7A-0ADE62384B30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.Infrastructure.Tests", "tests\SocialDietPlatform.Infrastructure.Tests\SocialDietPlatform.Infrastructure.Tests.csproj", "{D3778349-BF08-4114-A56D-57575836A9F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialDietPlatform.API.Tests", "tests\SocialDietPlatform.API.Tests\SocialDietPlatform.API.Tests.csproj", "{B087C63E-AF9B-4B3F-8C53-0F370EC4459C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E68D1391-8E0F-48C1-A5B4-632A3F8FAA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E68D1391-8E0F-48C1-A5B4-632A3F8FAA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E68D1391-8E0F-48C1-A5B4-632A3F8FAA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E68D1391-8E0F-48C1-A5B4-632A3F8FAA33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A012DB74-0A4D-4297-A177-C667937F3267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A012DB74-0A4D-4297-A177-C667937F3267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A012DB74-0A4D-4297-A177-C667937F3267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A012DB74-0A4D-4297-A177-C667937F3267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8A42D58-B072-4059-8388-FCE4833DE21D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A42D58-B072-4059-8388-FCE4833DE21D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A42D58-B072-4059-8388-FCE4833DE21D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A42D58-B072-4059-8388-FCE4833DE21D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E2E4E66-F2A8-47CC-9ED0-673F88B58394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E2E4E66-F2A8-47CC-9ED0-673F88B58394}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E2E4E66-F2A8-47CC-9ED0-673F88B58394}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E2E4E66-F2A8-47CC-9ED0-673F88B58394}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF1D914C-BD59-4862-84BB-AFF0913A3E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF1D914C-BD59-4862-84BB-AFF0913A3E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF1D914C-BD59-4862-84BB-AFF0913A3E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF1D914C-BD59-4862-84BB-AFF0913A3E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA6E8370-1116-4FAC-9F7A-0ADE62384B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA6E8370-1116-4FAC-9F7A-0ADE62384B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA6E8370-1116-4FAC-9F7A-0ADE62384B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA6E8370-1116-4FAC-9F7A-0ADE62384B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3778349-BF08-4114-A56D-57575836A9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3778349-BF08-4114-A56D-57575836A9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3778349-BF08-4114-A56D-57575836A9F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3778349-BF08-4114-A56D-57575836A9F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B087C63E-AF9B-4B3F-8C53-0F370EC4459C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B087C63E-AF9B-4B3F-8C53-0F370EC4459C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B087C63E-AF9B-4B3F-8C53-0F370EC4459C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B087C63E-AF9B-4B3F-8C53-0F370EC4459C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{18982C65-6C97-4AB5-AA42-F2C7C8F812C9} = {CBD84C3D-A534-4548-8B3D-E8503C1F6289}
+		{E68D1391-8E0F-48C1-A5B4-632A3F8FAA33} = {18982C65-6C97-4AB5-AA42-F2C7C8F812C9}
+		{A012DB74-0A4D-4297-A177-C667937F3267} = {18982C65-6C97-4AB5-AA42-F2C7C8F812C9}
+		{62063CD3-D423-41A5-BF26-3A89D41A2B6B} = {CBD84C3D-A534-4548-8B3D-E8503C1F6289}
+		{B8A42D58-B072-4059-8388-FCE4833DE21D} = {62063CD3-D423-41A5-BF26-3A89D41A2B6B}
+		{7E2E4E66-F2A8-47CC-9ED0-673F88B58394} = {62063CD3-D423-41A5-BF26-3A89D41A2B6B}
+		{55EBE15D-F8A0-4709-BA8E-49B551322F11} = {CBD84C3D-A534-4548-8B3D-E8503C1F6289}
+		{BF1D914C-BD59-4862-84BB-AFF0913A3E3B} = {55EBE15D-F8A0-4709-BA8E-49B551322F11}
+		{AA6E8370-1116-4FAC-9F7A-0ADE62384B30} = {994F763D-329E-4AB3-B9B6-8CD56BDA32DB}
+		{D3778349-BF08-4114-A56D-57575836A9F5} = {994F763D-329E-4AB3-B9B6-8CD56BDA32DB}
+		{B087C63E-AF9B-4B3F-8C53-0F370EC4459C} = {994F763D-329E-4AB3-B9B6-8CD56BDA32DB}
+	EndGlobalSection
+EndGlobal
