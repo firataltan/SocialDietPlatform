@@ -50,6 +50,7 @@ public static class DependencyInjection
         services.AddScoped<IFollowRepository, FollowRepository>();
         services.AddScoped<IMealRepository, MealRepository>();
         services.AddScoped<IFoodRepository, FoodRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         return services;
     }

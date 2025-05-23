@@ -51,6 +51,13 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Comme
 
         await _commentRepository.AddAsync(comment);
 
-        return CommentDto.FromEntity(comment);
+        return new CommentDto
+        {
+            Id = comment.Id,
+            Content = comment.Content,
+            UserId = comment.UserId,
+            PostId = comment.PostId,
+            CreatedAt = comment.CreatedAt
+        };
     }
 } 

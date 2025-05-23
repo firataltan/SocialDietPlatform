@@ -12,7 +12,7 @@ using SocialDietPlatform.Persistence;
 using SocialDietPlatform.Persistence.Context;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args); 
 
 // Serilog configuration
 Log.Logger = new LoggerConfiguration()
