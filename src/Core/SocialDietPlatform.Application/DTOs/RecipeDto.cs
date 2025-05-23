@@ -13,20 +13,24 @@ public class RecipeDto
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Instructions { get; set; } = string.Empty;
-    public int PrepTimeMinutes { get; set; }
-    public int CookTimeMinutes { get; set; }
+    public int PreparationTime { get; set; }
+    public int CookingTime { get; set; }
     public int Servings { get; set; }
-    public string? ImageUrl { get; set; }
-    public int TotalTimeMinutes { get; set; }
+    public string ImageUrl { get; set; } = string.Empty;
     public decimal TotalCalories { get; set; }
-    public decimal CaloriesPerServing { get; set; }
-    public UserDto User { get; set; } = null!;
-    public CategoryDto Category { get; set; } = null!;
-    public List<RecipeIngredientDto> Ingredients { get; set; } = new();
     public Guid CategoryId { get; set; }
+    public string CategoryName { get; set; } = string.Empty;
     public Guid UserId { get; set; }
+    public string UserName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public int TotalTimeMinutes { get; set; }
+    public decimal CaloriesPerServing { get; set; }
+    public int LikeCount { get; set; }
+    public int CommentCount { get; set; }
+    public bool IsLikedByCurrentUser { get; set; }
+    public ICollection<RecipeIngredientDto> Ingredients { get; set; } = new List<RecipeIngredientDto>();
+    public ICollection<CommentDto> Comments { get; set; } = new List<CommentDto>();
 
     public static RecipeDto FromEntity(Recipe recipe)
     {
@@ -36,13 +40,11 @@ public class RecipeDto
             Name = recipe.Name,
             Description = recipe.Description,
             Instructions = recipe.Instructions,
-            PrepTimeMinutes = recipe.PrepTimeMinutes,
-            CookTimeMinutes = recipe.CookTimeMinutes,
+            PreparationTime = recipe.PreparationTime,
+            CookingTime = recipe.CookingTime,
             Servings = recipe.Servings,
             ImageUrl = recipe.ImageUrl,
-            TotalTimeMinutes = recipe.TotalTimeMinutes,
             TotalCalories = recipe.TotalCalories,
-            CaloriesPerServing = recipe.CaloriesPerServing,
             CategoryId = recipe.CategoryId,
             UserId = recipe.UserId,
             CreatedAt = recipe.CreatedAt,

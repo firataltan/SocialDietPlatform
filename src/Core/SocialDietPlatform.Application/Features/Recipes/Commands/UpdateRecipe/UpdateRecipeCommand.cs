@@ -11,8 +11,8 @@ public record UpdateRecipeCommand : IRequest<Result<Recipe>>
     public string Name { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
     public string Instructions { get; init; } = string.Empty;
-    public int PrepTimeMinutes { get; init; }
-    public int CookTimeMinutes { get; init; }
+    public int PreparationTime { get; init; }
+    public int CookingTime { get; init; }
     public int Servings { get; init; }
     public string? ImageUrl { get; init; }
     public Guid CategoryId { get; init; }
@@ -36,10 +36,10 @@ public class UpdateRecipeCommandHandler : IRequestHandler<UpdateRecipeCommand, R
         recipe.Name = request.Name;
         recipe.Description = request.Description;
         recipe.Instructions = request.Instructions;
-        recipe.PrepTimeMinutes = request.PrepTimeMinutes;
-        recipe.CookTimeMinutes = request.CookTimeMinutes;
+        recipe.PreparationTime = request.PreparationTime;
+        recipe.CookingTime = request.CookingTime;
         recipe.Servings = request.Servings;
-        recipe.ImageUrl = request.ImageUrl;
+        recipe.ImageUrl = request.ImageUrl ?? recipe.ImageUrl;
         recipe.CategoryId = request.CategoryId;
 
         await _recipeRepository.UpdateAsync(recipe);

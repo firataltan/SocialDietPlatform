@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -8,6 +9,7 @@ using SocialDietPlatform.API.Middlewares;
 using SocialDietPlatform.Application;
 using SocialDietPlatform.Infrastructure;
 using SocialDietPlatform.Persistence;
+using SocialDietPlatform.Persistence.Context;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +47,7 @@ builder.Services.AddVersionedApiExplorer(setup =>
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -79,7 +82,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Social Diet Platform API",
         Version = "v1",
-        Description = "Sosyal Diyet Platformu API Dok�mantasyonu"
+        Description = "Sosyal Diyet Platformu API Dokümantasyonu"
     });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -120,6 +123,23 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Test database connection
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        Log.Information("Veritabanı bağlantısı test ediliyor...");
+        await context.Database.CanConnectAsync();
+        Log.Information("Veritabanı bağlantısı başarılı!");
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Veritabanı bağlantısı başarısız!");
+    }
+}
+
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -127,7 +147,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Social Diet Platform API V1");
-        c.RoutePrefix = string.Empty;
+        c.RoutePrefix = string.Empty; // Swagger UI'ı root URL'de göster
     });
 }
 
@@ -144,12 +164,14 @@ app.MapControllers();
 
 try
 {
-    Log.Information("Uygulama ba�lat�l�yor...");
+    Log.Information("Uygulama başlatılıyor...");
+    Log.Information("Swagger UI: https://localhost:7000");
+    Log.Information("API Endpoint: https://localhost:7000/api/v1");
     app.Run();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Uygulama ba�lat�lamad�");
+    Log.Fatal(ex, "Uygulama başlatılamadı");
 }
 finally
 {

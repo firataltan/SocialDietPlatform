@@ -24,11 +24,13 @@ public class DietPlanConfiguration : IEntityTypeConfiguration<DietPlan>
         builder.Property(d => d.TargetCalories)
             .HasColumnType("decimal(8,2)");
 
+        // User ilişkisi - CASCADE yerine RESTRICT
         builder.HasOne(d => d.User)
             .WithMany(u => u.DietPlans)
             .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
+        // Dietitian ilişkisi
         builder.HasOne(d => d.Dietitian)
             .WithMany()
             .HasForeignKey(d => d.DietitianId)

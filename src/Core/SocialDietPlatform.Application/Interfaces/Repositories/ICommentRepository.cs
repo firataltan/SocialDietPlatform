@@ -12,4 +12,6 @@ public interface ICommentRepository : IBaseRepository<Comment>
 {
     Task<IEnumerable<Comment>> GetPostCommentsAsync(Guid postId, int page, int pageSize, CancellationToken cancellationToken = default);
     Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId, int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Comment>> GetByPostIdAsync(Guid postId);
+    Task DeleteAsync(Comment comment);
 }

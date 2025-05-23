@@ -13,6 +13,21 @@ public class SendNotificationCommand : IRequest<Result<Notification>>
     public string Message { get; set; }
     public NotificationType Type { get; set; }
     public string? AdditionalData { get; set; }
+
+    public SendNotificationCommand()
+    {
+        Title = string.Empty;
+        Message = string.Empty;
+    }
+
+    public SendNotificationCommand(string title, string message, Guid userId, NotificationType type, string? additionalData = null)
+    {
+        Title = title;
+        Message = message;
+        UserId = userId;
+        Type = type;
+        AdditionalData = additionalData;
+    }
 }
 
 public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand, Result<Notification>>

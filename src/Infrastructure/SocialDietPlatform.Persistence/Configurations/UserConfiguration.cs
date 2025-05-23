@@ -34,21 +34,21 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.TargetWeight)
             .HasColumnType("decimal(5,2)");
 
-        // Navigation properties
+        // Navigation properties - Cascade sorunlarını önlemek için RESTRICT
         builder.HasMany(u => u.Posts)
             .WithOne(p => p.User)
             .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
         builder.HasMany(u => u.Comments)
             .WithOne(c => c.User)
             .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
         builder.HasMany(u => u.Likes)
             .WithOne(l => l.User)
             .HasForeignKey(l => l.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
         builder.HasMany(u => u.Followers)
             .WithOne(f => f.Following)
@@ -63,17 +63,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(u => u.DietPlans)
             .WithOne(d => d.User)
             .HasForeignKey(d => d.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
         builder.HasMany(u => u.Recipes)
             .WithOne(r => r.User)
             .HasForeignKey(r => r.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
         builder.HasMany(u => u.Notifications)
             .WithOne(n => n.User)
             .HasForeignKey(n => n.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); // CASCADE yerine RESTRICT
 
         builder.HasMany(u => u.ClientAppointments)
             .WithOne(a => a.Client)

@@ -4,24 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MediatR.Pipeline;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace SocialDietPlatform.Application.Common.Behaviours;
 
-public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull
+public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
-    private readonly ILogger<LoggingBehaviour<TRequest>> _logger;
+    private readonly ILogger<LoggingBehaviour<TRequest, TResponse>> _logger;
 
-    public LoggingBehaviour(ILogger<LoggingBehaviour<TRequest>> logger)
+    public LoggingBehaviour(ILogger<LoggingBehaviour<TRequest, TResponse>> logger)
     {
         _logger = logger;
     }
 
-    public async Task Process(TRequest request, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
         _logger.LogInformation("Request: {Name} {@Request}", requestName, request);
-        await Task.CompletedTask;
+
+        var response = await next();
+
+        _logger.LogInformation("Response: {Name} {@Response}", requestName, response);
+
+        return response;
     }
 }

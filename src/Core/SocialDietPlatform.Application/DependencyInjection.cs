@@ -4,6 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using SocialDietPlatform.Application.Common.Behaviours;
 using System.Reflection;
 
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using SocialDietPlatform.Application.Common.Behaviours;
+using System.Reflection;
+
 namespace SocialDietPlatform.Application;
 
 public static class DependencyInjection
@@ -19,9 +25,9 @@ public static class DependencyInjection
         // FluentValidation
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-        // Pipeline Behaviours
+        // Pipeline Behaviours - Düzeltilmiş
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 
         return services;
     }

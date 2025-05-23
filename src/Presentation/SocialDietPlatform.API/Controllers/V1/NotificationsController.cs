@@ -53,8 +53,8 @@ public class NotificationsController : ControllerBase
     public async Task<ActionResult<ApiResponse<int>>> GetUnreadNotificationCount()
     {
         var userId = GetCurrentUserId();
-        // GetUnreadNotificationCountQuery implementation needed
-
+        // TODO: Implement GetUnreadNotificationCountQuery
+        await Task.CompletedTask;
         return Ok(ApiResponse<int>.SuccessResult(0));
     }
 
@@ -64,7 +64,8 @@ public class NotificationsController : ControllerBase
     [HttpPut("{id}/mark-read")]
     public async Task<ActionResult<ApiResponse<bool>>> MarkNotificationAsRead(Guid id)
     {
-        // MarkNotificationAsReadCommand implementation needed
+        // TODO: Implement MarkNotificationAsReadCommand
+        await Task.CompletedTask;
         return Ok(ApiResponse<bool>.SuccessResult(true, "Bildirim okundu olarak işaretlendi"));
     }
 
@@ -75,8 +76,8 @@ public class NotificationsController : ControllerBase
     public async Task<ActionResult<ApiResponse<bool>>> MarkAllNotificationsAsRead()
     {
         var userId = GetCurrentUserId();
-        // MarkAllNotificationsAsReadCommand implementation needed
-
+        // TODO: Implement MarkAllNotificationsAsReadCommand
+        await Task.CompletedTask;
         return Ok(ApiResponse<bool>.SuccessResult(true, "Tüm bildirimler okundu olarak işaretlendi"));
     }
 
@@ -101,7 +102,8 @@ public class NotificationsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<ApiResponse<bool>>> DeleteNotification(Guid id)
     {
-        // DeleteNotificationCommand implementation needed
+        // TODO: Implement DeleteNotificationCommand
+        await Task.CompletedTask;
         return Ok(ApiResponse<bool>.SuccessResult(true, "Bildirim başarıyla silindi"));
     }
 
@@ -111,7 +113,8 @@ public class NotificationsController : ControllerBase
     [HttpGet("settings")]
     public async Task<ActionResult<ApiResponse<object>>> GetNotificationSettings()
     {
-        // GetNotificationSettingsQuery implementation needed
+        // TODO: Implement GetNotificationSettingsQuery
+        await Task.CompletedTask;
         var settings = new
         {
             EmailNotifications = true,
@@ -131,7 +134,8 @@ public class NotificationsController : ControllerBase
     [HttpPut("settings")]
     public async Task<ActionResult<ApiResponse<bool>>> UpdateNotificationSettings([FromBody] object settings)
     {
-        // UpdateNotificationSettingsCommand implementation needed
+        // TODO: Implement UpdateNotificationSettingsCommand
+        await Task.CompletedTask;
         return Ok(ApiResponse<bool>.SuccessResult(true, "Bildirim ayarları başarıyla güncellendi"));
     }
 

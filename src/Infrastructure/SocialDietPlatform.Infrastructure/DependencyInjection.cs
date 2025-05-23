@@ -10,6 +10,7 @@ using SendGrid.Extensions.DependencyInjection;
 using SocialDietPlatform.Application.Interfaces.Services;
 using SocialDietPlatform.Infrastructure.Configuration;
 using SocialDietPlatform.Infrastructure.Services;
+using Nest;
 
 namespace SocialDietPlatform.Infrastructure;
 
@@ -25,6 +26,8 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<ISearchService, SearchService>();
 
         // SendGrid
         services.AddSendGrid(options =>
@@ -37,6 +40,14 @@ public static class DependencyInjection
         {
             options.Configuration = configuration.GetConnectionString("Redis");
         });
+
+        // Elasticsearch
+        var settings = new ConnectionSettings(new Uri("http://elasticsearch:9200"))
+            .DefaultIndex("socialdiet")
+            .EnableDebugMode()
+            .PrettyJson();
+
+        services.AddSingleton<IElasticClient>(new ElasticClient(settings));
 
         return services;
     }

@@ -35,7 +35,7 @@ public class CommentRepository : BaseRepository<Comment>, ICommentRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Comment> GetByIdAsync(Guid id)
+    public async Task<Comment?> GetByIdWithUserAndPost(Guid id)
     {
         return await _context.Comments
             .Include(c => c.User)
@@ -56,6 +56,7 @@ public class CommentRepository : BaseRepository<Comment>, ICommentRepository
         return await _context.Comments
             .Include(c => c.User)
             .Where(c => c.PostId == postId)
+            .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
     }
 
@@ -70,7 +71,9 @@ public class CommentRepository : BaseRepository<Comment>, ICommentRepository
     public async Task<IEnumerable<Comment>> GetPostCommentsAsync(Guid postId, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         return await _context.Comments
+            .Include(c => c.User)
             .Where(c => c.PostId == postId)
+            .OrderByDescending(c => c.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
@@ -79,7 +82,9 @@ public class CommentRepository : BaseRepository<Comment>, ICommentRepository
     public async Task<IEnumerable<Comment>> GetUserCommentsAsync(Guid userId, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         return await _context.Comments
+            .Include(c => c.User)
             .Where(c => c.UserId == userId)
+            .OrderByDescending(c => c.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);

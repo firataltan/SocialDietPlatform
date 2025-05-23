@@ -29,7 +29,6 @@ public class FollowConfiguration : IEntityTypeConfiguration<Follow>
             .IsUnique();
 
         // Kendi kendini takip etmeyi engelle
-        builder.HasCheckConstraint("CK_Follow_NoSelfFollow",
-            "\"FollowerId\" != \"FollowingId\"");
+        builder.ToTable("Follows", t => t.HasCheckConstraint("CK_Follows_SelfFollow", "FollowerId != FollowingId"));
     }
 }

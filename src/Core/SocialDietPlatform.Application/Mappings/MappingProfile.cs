@@ -29,11 +29,14 @@ public class MappingProfile : Profile
         CreateMap<Meal, MealDto>();
         CreateMap<Food, FoodDto>();
         CreateMap<Recipe, RecipeDto>()
-            .ForMember(dest => dest.PrepTimeMinutes, opt => opt.MapFrom(src => src.PrepTimeMinutes))
-            .ForMember(dest => dest.CookTimeMinutes, opt => opt.MapFrom(src => src.CookTimeMinutes))
+            .ForMember(dest => dest.PreparationTime, opt => opt.MapFrom(src => src.PreparationTime))
+            .ForMember(dest => dest.CookingTime, opt => opt.MapFrom(src => src.CookingTime))
             .ForMember(dest => dest.TotalTimeMinutes, opt => opt.MapFrom(src => src.TotalTimeMinutes))
-            .ForMember(dest => dest.TotalCalories, opt => opt.MapFrom(src => src.TotalCalories))
-            .ForMember(dest => dest.CaloriesPerServing, opt => opt.MapFrom(src => src.CaloriesPerServing));
+            .ForMember(dest => dest.CaloriesPerServing, opt => opt.MapFrom(src => src.CaloriesPerServing))
+            .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : string.Empty))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.UserName : string.Empty))
+            .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.Likes.Count))
+            .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count));
 
         CreateMap<RecipeIngredient, RecipeIngredientDto>();
         CreateMap<Category, CategoryDto>();

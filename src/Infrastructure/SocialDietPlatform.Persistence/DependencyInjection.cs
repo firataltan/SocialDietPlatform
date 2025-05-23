@@ -1,21 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using SocialDietPlatform.Application.Interfaces;
-using SocialDietPlatform.Application.Interfaces.Repositories;
-using SocialDietPlatform.Domain.Entities;
-using SocialDietPlatform.Persistence.Context;
-using SocialDietPlatform.Persistence.Repositories;
-
-// ===== src/Infrastructure/SocialDietPlatform.Persistence/DependencyInjection.cs =====
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,9 +14,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        // Database Context
+        // Database Context - SQL Server
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         // Identity
         services.AddIdentity<User, IdentityRole<Guid>>(options =>
