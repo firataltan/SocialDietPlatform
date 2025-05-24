@@ -6,6 +6,8 @@ using SocialDietPlatform.Application.DTOs;
 using SocialDietPlatform.Application.Features.Posts.Commands.CreatePost;
 using SocialDietPlatform.Application.Features.Posts.Commands.LikePost;
 using SocialDietPlatform.Application.Features.Posts.Queries.GetFeedPosts;
+using SocialDietPlatform.Application.Features.Comments.Commands.AddComment;
+using SocialDietPlatform.Application.Features.Comments.Queries.GetPostComments;
 using System.Security.Claims;
 
 namespace SocialDietPlatform.API.Controllers.V1;
@@ -57,6 +59,27 @@ public class PostsController : ControllerBase
             return BadRequest(ApiResponse<PagedResult<PostDto>>.ErrorResult(result.Error));
 
         return Ok(ApiResponse<PagedResult<PostDto>>.SuccessResult(result.Value));
+    }
+
+    /// <summary>
+    /// Gönderiye yorum ekle
+    /// </summary>
+    [HttpPost("{id}/comments")]
+    public async Task<ActionResult<ApiResponse<CommentDto>>> AddComment(Guid id, [FromBody] AddCommentCommand command)
+    {
+        command.PostId = id;
+        var result = await _mediator.Send(command);
+        return Ok(ApiResponse<CommentDto>.SuccessResult(result));
+    }
+
+    /// <summary>
+    /// Gönderinin yorumlarını getir
+    /// </summary>
+    [HttpGet("{id}/comments")]
+    public async Task<ActionResult<ApiResponse<IEnumerable<CommentDto>>>> GetPostComments(Guid id)
+    {
+        var comments = await _mediator.Send(new GetPostCommentsQuery { PostId = id });
+        return Ok(ApiResponse<IEnumerable<CommentDto>>.SuccessResult(comments));
     }
 
     /// <summary>

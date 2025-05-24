@@ -3,16 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialDietPlatform.Application.Common.Models;
 using SocialDietPlatform.Application.DTOs;
-using SocialDietPlatform.Application.Features.Comments.Commands.AddComment;
-using SocialDietPlatform.Application.Features.Comments.Commands.DeleteComment;
-using SocialDietPlatform.Application.Features.Comments.Queries.GetRecipeComments;
 using SocialDietPlatform.Application.Features.Recipes.Commands.CreateRecipe;
 using SocialDietPlatform.Application.Features.Recipes.Commands.UpdateRecipe;
 using SocialDietPlatform.Application.Features.Recipes.Queries.GetRecipe;
 using SocialDietPlatform.Application.Features.Recipes.Queries.GetRecipesByCategory;
 using SocialDietPlatform.Application.Features.Recipes.Queries.SearchRecipes;
-using SocialDietPlatform.Application.Features.Recipes.Commands.LikeRecipe;
-using SocialDietPlatform.Application.Features.Recipes.Commands.UnlikeRecipe;
 using System.Security.Claims;
 
 namespace SocialDietPlatform.API.Controllers.V1;
@@ -187,42 +182,6 @@ public class RecipesController : ControllerBase
         // GetCategoriesQuery implementation needed
         await Task.CompletedTask; // Temporary fix until implementation
         return Ok(ApiResponse<IEnumerable<CategoryDto>>.SuccessResult(new List<CategoryDto>()));
-    }
-
-    [HttpGet("{id}/comments")]
-    public async Task<ActionResult<ApiResponse<IEnumerable<CommentDto>>>> GetRecipeComments(Guid id)
-    {
-        var comments = await _mediator.Send(new GetRecipeCommentsQuery { RecipeId = id });
-        return Ok(ApiResponse<IEnumerable<CommentDto>>.SuccessResult(comments));
-    }
-
-    [HttpPost("{id}/comments")]
-    public async Task<ActionResult<ApiResponse<CommentDto>>> AddComment(Guid id, [FromBody] AddCommentCommand command)
-    {
-        command.RecipeId = id;
-        var result = await _mediator.Send(command);
-        return Ok(ApiResponse<CommentDto>.SuccessResult(result));
-    }
-
-    [HttpDelete("{id}/comments/{commentId}")]
-    public async Task<ActionResult<ApiResponse<bool>>> DeleteComment(Guid id, Guid commentId)
-    {
-        var result = await _mediator.Send(new DeleteCommentCommand { CommentId = commentId });
-        return Ok(ApiResponse<bool>.SuccessResult(result.IsSuccess));
-    }
-
-    [HttpPost("{id}/like")]
-    public async Task<ActionResult<ApiResponse<bool>>> LikeRecipe(Guid id)
-    {
-        var result = await _mediator.Send(new LikeRecipeCommand { RecipeId = id });
-        return Ok(ApiResponse<bool>.SuccessResult(result.IsSuccess));
-    }
-
-    [HttpDelete("{id}/like")]
-    public async Task<ActionResult<ApiResponse<bool>>> UnlikeRecipe(Guid id)
-    {
-        var result = await _mediator.Send(new UnlikeRecipeCommand { RecipeId = id });
-        return Ok(ApiResponse<bool>.SuccessResult(result.IsSuccess));
     }
 
     private Guid GetCurrentUserId()

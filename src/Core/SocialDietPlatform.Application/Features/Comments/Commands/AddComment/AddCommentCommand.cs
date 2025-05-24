@@ -10,23 +10,23 @@ namespace SocialDietPlatform.Application.Features.Comments.Commands.AddComment;
 
 public record AddCommentCommand : IRequest<CommentDto>
 {
-    public Guid RecipeId { get; set; }
+    public Guid PostId { get; set; }
     public string Content { get; set; } = string.Empty;
 }
 
 public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, CommentDto>
 {
     private readonly ICommentRepository _commentRepository;
-    private readonly IRecipeRepository _recipeRepository;
+    private readonly IPostRepository _postRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public AddCommentCommandHandler(
         ICommentRepository commentRepository,
-        IRecipeRepository recipeRepository,
+        IPostRepository postRepository,
         IHttpContextAccessor httpContextAccessor)
     {
         _commentRepository = commentRepository;
-        _recipeRepository = recipeRepository;
+        _postRepository = postRepository;
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -38,15 +38,15 @@ public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Comme
 
         var userId = Guid.Parse(userIdClaim);
 
-        var recipe = await _recipeRepository.GetByIdAsync(request.RecipeId);
-        if (recipe == null)
-            throw new KeyNotFoundException("Tarif bulunamadı.");
+        var post = await _postRepository.GetPostWithDetailsAsync(request.PostId, cancellationToken);
+        if (post == null)
+            throw new KeyNotFoundException("Gönderi bulunamadı.");
 
         var comment = new Comment
         {
             Content = request.Content,
             UserId = userId,
-            PostId = request.RecipeId
+            PostId = request.PostId
         };
 
         await _commentRepository.AddAsync(comment);
