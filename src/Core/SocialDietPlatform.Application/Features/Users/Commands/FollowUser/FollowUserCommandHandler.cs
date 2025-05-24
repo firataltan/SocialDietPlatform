@@ -20,68 +20,86 @@ public class FollowUserCommandHandler : IRequestHandler<FollowUserCommand, Resul
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationService _notificationService;
+    private readonly IFollowRepository _followRepository;
 
     public FollowUserCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        INotificationService notificationService)
+        INotificationService notificationService,
+        IFollowRepository followRepository)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _notificationService = notificationService;
+        _followRepository = followRepository;
     }
 
     public async Task<Result<bool>> Handle(FollowUserCommand request, CancellationToken cancellationToken)
     {
-        // Business rule validation
-        // var cannotFollowSelfRule = new UserCannotFollowThemselfRule(request.FollowerId, request.FollowingId);
-        // cannotFollowSelfRule.CheckRule();
-
-        var follower = await _userRepository.GetByIdAsync(request.FollowerId, cancellationToken);
-        if (follower == null)
+        try
         {
-            return Result.Failure<bool>("Takip eden kullanıcı bulunamadı.");
-        }
-
-        var following = await _userRepository.GetByIdAsync(request.FollowingId, cancellationToken);
-        if (following == null)
-        {
-            return Result.Failure<bool>("Takip edilecek kullanıcı bulunamadı.");
-        }
-
-        // Check if already following
-        var isAlreadyFollowing = await _userRepository.IsFollowingAsync(request.FollowerId, request.FollowingId, cancellationToken);
-
-        if (isAlreadyFollowing)
-        {
-            // Unfollow logic would go here
-            return Result.Success(false);
-        }
-        else
-        {
-            // Follow
-            var follow = new Follow
+            var follower = await _userRepository.GetByIdAsync(request.FollowerId, cancellationToken);
+            if (follower == null)
             {
-                FollowerId = request.FollowerId,
-                FollowingId = request.FollowingId
-            };
+                return Result.Failure<bool>("Takip eden kullanıcı bulunamadı.");
+            }
 
-            // Add follow relationship (this would need to be added to a repository)
-            // For now, we'll assume this is handled in the UserRepository
+            var following = await _userRepository.GetByIdAsync(request.FollowingId, cancellationToken);
+            if (following == null)
+            {
+                return Result.Failure<bool>("Takip edilecek kullanıcı bulunamadı.");
+            }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // Check if already following
+            var isAlreadyFollowing = await _followRepository.IsFollowingAsync(request.FollowerId, request.FollowingId, cancellationToken);
 
-            // Send notification
-            await _notificationService.SendNotificationAsync(
-                request.FollowingId,
-                "Yeni Takipçi",
-                $"{follower.FullName} sizi takip etmeye başladı",
-                NotificationType.Follow,
-                request.FollowerId,
-                "User",
-                cancellationToken);
+            if (isAlreadyFollowing)
+            {
+                // Unfollow
+                var existingFollow = await _followRepository.GetFirstOrDefaultAsync(
+                    f => f.FollowerId == request.FollowerId && f.FollowingId == request.FollowingId && !f.IsDeleted,
+                    cancellationToken);
 
-            return Result.Success(true);
+                if (existingFollow != null)
+                {
+                    existingFollow.IsDeleted = true;
+                    existingFollow.DeletedAt = DateTime.UtcNow;
+                    await _unitOfWork.SaveChangesAsync(cancellationToken);
+                }
+
+                return Result.Success(false);
+            }
+            else
+            {
+                // Follow
+                var follow = new Follow
+                {
+                    Id = Guid.NewGuid(),
+                    FollowerId = request.FollowerId,
+                    FollowingId = request.FollowingId,
+                    CreatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                await _followRepository.AddAsync(follow, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                // Send notification
+                await _notificationService.SendNotificationAsync(
+                    request.FollowingId,
+                    "Yeni Takipçi",
+                    $"{follower.FullName} sizi takip etmeye başladı",
+                    NotificationType.Follow,
+                    request.FollowerId,
+                    "User",
+                    cancellationToken);
+
+                return Result.Success(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure<bool>($"Takip işlemi sırasında bir hata oluştu: {ex.Message}");
         }
     }
 }

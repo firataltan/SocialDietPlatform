@@ -34,6 +34,12 @@ public class FollowRepository : BaseRepository<Follow>, IFollowRepository
     public async Task<bool> IsFollowingAsync(Guid followerId, Guid followingId, CancellationToken cancellationToken = default)
     {
         return await _context.Follows
-            .AnyAsync(f => f.FollowerId == followerId && f.FollowingId == followingId, cancellationToken);
+            .AnyAsync(f => f.FollowerId == followerId && f.FollowingId == followingId && !f.IsDeleted, cancellationToken);
+    }
+
+    public async Task<Follow?> GetFirstOrDefaultAsync(Expression<Func<Follow, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _context.Follows
+            .FirstOrDefaultAsync(predicate, cancellationToken);
     }
 } 

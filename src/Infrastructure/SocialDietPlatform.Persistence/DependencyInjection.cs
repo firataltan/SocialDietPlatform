@@ -51,7 +51,7 @@ public static class DependencyInjection
         services.AddScoped<IMealRepository, MealRepository>();
         services.AddScoped<IFoodRepository, FoodRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
-
+        services.AddScoped<ILikeRepository, LikeRepository>();
         return services;
     }
 }
