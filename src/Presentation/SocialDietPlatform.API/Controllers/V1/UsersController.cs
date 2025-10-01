@@ -8,6 +8,8 @@ using SocialDietPlatform.Application.Features.Users.Commands.UpdateProfile;
 using SocialDietPlatform.Application.Features.Users.Queries.GetUserProfile;
 using SocialDietPlatform.Application.Features.Users.Queries.SearchUsers;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace SocialDietPlatform.API.Controllers.V1;
 
@@ -23,6 +25,9 @@ public class UsersController : ControllerBase
     {
         _mediator = mediator;
     }
+
+    // Yeni record tanımı
+    public record UploadResult(string Url);
 
     /// <summary>
     /// Kullanıcı profili getir
@@ -56,6 +61,53 @@ public class UsersController : ControllerBase
             return BadRequest(ApiResponse<UserDto>.ErrorResult(result.Error));
 
         return Ok(ApiResponse<UserDto>.SuccessResult(result.Value, "Profil başarıyla güncellendi"));
+    }
+
+    /// <summary>
+    /// Profil resmi yükle
+    /// </summary>
+    [HttpPost("upload-profile-image")]
+    public async Task<ActionResult<ApiResponse<UploadResult>>> UploadProfileImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest(ApiResponse<UploadResult>.ErrorResult("Dosya seçilmedi."));
+        }
+
+        try
+        {
+            // Dosya adını güvenli hale getir (isteğe bağlı ama önerilir)
+            var trustedFileNameForDisplay = Path.GetFileName(file.FileName);
+            var fileExtension = Path.GetExtension(trustedFileNameForDisplay);
+            var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+
+            // Yükleme klasörünü belirle (wwwroot altında bir klasör olabilir)
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profilepictures");
+
+            // Klasör yoksa oluştur
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            // Dosyayı sunucuya kaydet
+            var filePath = Path.Combine(uploadPath, uniqueFileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Kaydedilen dosyanın URL'ini oluştur
+            var fileUrl = $"/profilepictures/{uniqueFileName}";
+
+            // Başarılı yanıtı UploadResult kullanarak döndür
+            return Ok(ApiResponse<UploadResult>.SuccessResult(new UploadResult(fileUrl), "Profil resmi başarıyla yüklendi."));
+        }
+        catch (Exception ex)
+        {
+            // Hata yönetimi
+            return StatusCode(500, ApiResponse<UploadResult>.ErrorResult($"Dosya yüklenirken bir hata oluştu: {ex.Message}"));
+        }
     }
 
     /// <summary>

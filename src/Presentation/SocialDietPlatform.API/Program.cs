@@ -113,15 +113,24 @@ builder.Services.AddSwaggerGen(c =>
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:5173") // Frontend URL'i
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
 var app = builder.Build();
+
+// Add a very early middleware to log incoming requests
+app.Use(async (context, next) =>
+{
+    Log.Information("Incoming request: {Method} {Path}", context.Request.Method, context.Request.Path);
+    await next();
+    Log.Information("Outgoing response: {StatusCode}", context.Response.StatusCode);
+});
 
 // Test database connection
 using (var scope = app.Services.CreateScope())
@@ -155,7 +164,9 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

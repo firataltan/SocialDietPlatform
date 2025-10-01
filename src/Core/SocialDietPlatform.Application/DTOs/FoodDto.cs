@@ -12,6 +12,9 @@ public class FoodDto
     public string Name { get; set; } = string.Empty;
     public string Brand { get; set; } = string.Empty;
     public string? Barcode { get; set; }
-    public NutritionalInfoDto NutritionalInfo { get; set; } = null!;
+    public decimal Calories { get; set; }
+    public decimal Protein { get; set; }
+    public decimal Carbs { get; set; }
+    public decimal Fat { get; set; }
     public string Unit { get; set; } = string.Empty;
 }

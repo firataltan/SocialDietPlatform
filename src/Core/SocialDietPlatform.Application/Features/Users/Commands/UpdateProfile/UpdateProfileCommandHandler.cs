@@ -10,6 +10,7 @@ using SocialDietPlatform.Application.Common.Models;
 using SocialDietPlatform.Application.DTOs;
 using SocialDietPlatform.Application.Interfaces;
 using SocialDietPlatform.Application.Interfaces.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace SocialDietPlatform.Application.Features.Users.Commands.UpdateProfile;
 
@@ -18,12 +19,14 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ILogger<UpdateProfileCommandHandler> _logger;
 
-    public UpdateProfileCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
+    public UpdateProfileCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper, ILogger<UpdateProfileCommandHandler> logger)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<Result<UserDto>> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -48,6 +51,9 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var userDto = _mapper.Map<UserDto>(user);
+
+        _logger.LogInformation("Mapped UserDto ProfilePictureUrl after update: {ProfilePictureUrl}", userDto.ProfilePictureUrl);
+
         return Result.Success(userDto);
     }
 }

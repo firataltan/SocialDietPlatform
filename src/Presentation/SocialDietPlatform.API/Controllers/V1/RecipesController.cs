@@ -9,6 +9,8 @@ using SocialDietPlatform.Application.Features.Recipes.Queries.GetRecipe;
 using SocialDietPlatform.Application.Features.Recipes.Queries.GetRecipesByCategory;
 using SocialDietPlatform.Application.Features.Recipes.Queries.SearchRecipes;
 using System.Security.Claims;
+using SocialDietPlatform.Application.Features.Categories.Queries.GetCategories;
+using SocialDietPlatform.Application.Features.Recipes.Queries.GetRecipes;
 
 namespace SocialDietPlatform.API.Controllers.V1;
 
@@ -43,6 +45,23 @@ public class RecipesController : ControllerBase
             nameof(GetRecipe),
             new { id = result.Value.Id },
             ApiResponse<RecipeDto>.SuccessResult(result.Value, "Tarif başarıyla oluşturuldu"));
+    }
+
+    /// <summary>
+    /// Tüm tarifleri getir
+    /// </summary>
+    [HttpGet]
+    public async Task<ActionResult<ApiResponse<IEnumerable<RecipeDto>>>> GetRecipes()
+    {
+        var query = new GetRecipesQuery();
+        var result = await _mediator.Send(query);
+
+        if (result.IsFailure)
+        {
+            return StatusCode(500, ApiResponse<IEnumerable<RecipeDto>>.ErrorResult("Tarifler getirilirken bir hata oluştu.", errors: new List<string> { result.Error }));
+        }
+
+        return Ok(ApiResponse<IEnumerable<RecipeDto>>.SuccessResult(result.Value, message: "Tarifler başarıyla getirildi."));
     }
 
     /// <summary>
@@ -179,9 +198,15 @@ public class RecipesController : ControllerBase
     [HttpGet("categories")]
     public async Task<ActionResult<ApiResponse<IEnumerable<CategoryDto>>>> GetCategories()
     {
-        // GetCategoriesQuery implementation needed
-        await Task.CompletedTask; // Temporary fix until implementation
-        return Ok(ApiResponse<IEnumerable<CategoryDto>>.SuccessResult(new List<CategoryDto>()));
+        var query = new GetCategoriesQuery();
+        var result = await _mediator.Send(query);
+
+        if (result.IsFailure)
+        {
+            return StatusCode(500, ApiResponse<IEnumerable<CategoryDto>>.ErrorResult("Kategoriler getirilirken bir hata oluştu.", errors: new List<string> { result.Error }));
+        }
+
+        return Ok(ApiResponse<IEnumerable<CategoryDto>>.SuccessResult(result.Value, message: "Kategoriler başarıyla getirildi."));
     }
 
     private Guid GetCurrentUserId()
